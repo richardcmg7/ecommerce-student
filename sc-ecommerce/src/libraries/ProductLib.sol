@@ -79,4 +79,8 @@ library ProductLib {
     function getProduct(ProductStorage storage self, uint256 productId) internal view returns (Product memory) {
         return self.products[productId];
     }
+
+    function getCompanyProductIds(ProductStorage storage self, uint256 companyId) internal view returns (uint256[] memory) {
+        return self.companyProducts[companyId];
+    }
 }

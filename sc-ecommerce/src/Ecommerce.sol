@@ -68,6 +68,22 @@ contract Ecommerce is Ownable {
         return products.getProduct(productId);
     }
 
+    function getMyProducts() external view returns (Product[] memory) {
+        uint256 companyId = companies.getCompanyIdByOwner(msg.sender);
+        require(companyId > 0, "No company registered");
+        return getCompanyProducts(companyId);
+    }
+
+    function getCompanyProducts(uint256 companyId) public view returns (Product[] memory) {
+        uint256[] memory ids = products.getCompanyProductIds(companyId);
+        Product[] memory list = new Product[](ids.length);
+        
+        for(uint i = 0; i < ids.length; i++) {
+            list[i] = products.getProduct(ids[i]);
+        }
+        return list;
+    }
+
     // --- Carrito de Compras ---
 
     function addToCart(uint256 productId, uint256 quantity) external {
