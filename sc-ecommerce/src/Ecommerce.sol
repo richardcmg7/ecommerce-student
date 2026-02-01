@@ -84,6 +84,27 @@ contract Ecommerce is Ownable {
         return list;
     }
 
+    function getAllProducts() external view returns (Product[] memory) {
+        uint256 total = products.productCount;
+        Product[] memory list = new Product[](total);
+        uint256 count = 0;
+
+        for(uint i = 1; i <= total; i++) {
+            Product memory p = products.getProduct(i);
+            if (p.isActive) {
+                list[count] = p;
+                count++;
+            }
+        }
+        
+        // Redimensionar array para quitar nulos si hubiera inactivos
+        Product[] memory activeList = new Product[](count);
+        for(uint j = 0; j < count; j++) {
+            activeList[j] = list[j];
+        }
+        return activeList;
+    }
+
     // --- Carrito de Compras ---
 
     function addToCart(uint256 productId, uint256 quantity) external {
