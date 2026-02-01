@@ -1,11 +1,23 @@
+# General
 node_modules/
 .DS_Store
-.env*
+.env
+.env.local
+.env.*.local
+
+# Foundry / Solidity
 out/
-.next/
 cache/
 broadcast/
 foundry-cache/
 forge-artifacts/
 artifacts/
-lib/
+
+# Librerías externas de Foundry (no src/lib de frontend)
+**/lib/forge-std/
+**/lib/openzeppelin-contracts/
+
+# Next.js
+.next/
+build/
+dist/
