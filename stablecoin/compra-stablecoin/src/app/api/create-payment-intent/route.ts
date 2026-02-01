@@ -18,11 +18,9 @@ export async function POST(request: Request) {
     }
 
     // Stripe espera el monto en la unidad más pequeña (centavos)
-    // Para EUR y USD es * 100.
-    // Ojo: EuroToken tiene 6 decimales y USDT 4 decimales en el contrato,
-    // pero Stripe maneja monedas FIAT estándar (2 decimales).
-    // Aquí cobramos FIAT real (2 decimales).
     const amountInCents = Math.round(amount * 100);
+
+    const { walletAddress, tokenType } = await request.json();
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amountInCents,
@@ -31,8 +29,8 @@ export async function POST(request: Request) {
         enabled: true,
       },
       metadata: {
-        // Aquí podríamos guardar la wallet destino para el webhook posterior
-        target_wallet: "pending_wallet_address" 
+        target_wallet: walletAddress,
+        token_type: tokenType
       }
     });
 
