@@ -1,0 +1,10 @@
+node_modules/
+.DS_Store
+.env*
+out/
+.next/
+cache/
+broadcast/
+foundry-cache/
+forge-artifacts/
+artifacts/
