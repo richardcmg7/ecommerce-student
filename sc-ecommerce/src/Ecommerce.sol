@@ -167,6 +167,20 @@ contract Ecommerce is Ownable {
         return invoices.getInvoice(invoiceId);
     }
 
+    function getCompanyInvoices(uint256 companyId) external view returns (Invoice[] memory) {
+        return invoices.getCompanyInvoices(companyId);
+    }
+
+    function getMyInvoices() external view returns (Invoice[] memory) {
+        uint256 companyId = companies.getCompanyIdByOwner(msg.sender);
+        require(companyId > 0, "No company registered");
+        return invoices.getCompanyInvoices(companyId);
+    }
+
+    function getCustomerInvoices(address customer) external view returns (Invoice[] memory) {
+        return invoices.getCustomerInvoices(customer);
+    }
+
     // Paso 2: Pagar la Invoice
     function processPayment(uint256 invoiceId, string memory tokenType) external {
         Invoice memory inv = invoices.getInvoice(invoiceId);

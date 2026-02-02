@@ -22,6 +22,8 @@ library InvoiceLib {
         uint256 invoiceCount;
         // Mapping Customer => Invoices
         mapping(address => uint256[]) customerInvoices;
+        // Mapping Company => Invoices
+        mapping(uint256 => uint256[]) companyInvoices;
     }
 
     function createInvoice(
@@ -47,6 +49,7 @@ library InvoiceLib {
         });
 
         self.customerInvoices[customer].push(newId);
+        self.companyInvoices[companyId].push(newId);
         emit InvoiceCreated(newId, customer, totalAmount);
         
         return newId;
@@ -60,5 +63,27 @@ library InvoiceLib {
 
     function getInvoice(InvoiceStorage storage self, uint256 invoiceId) internal view returns (Invoice memory) {
         return self.invoices[invoiceId];
+    }
+
+    function getCompanyInvoices(InvoiceStorage storage self, uint256 companyId) internal view returns (Invoice[] memory) {
+        uint256[] memory invoiceIds = self.companyInvoices[companyId];
+        Invoice[] memory companyInvoices = new Invoice[](invoiceIds.length);
+        
+        for (uint256 i = 0; i < invoiceIds.length; i++) {
+            companyInvoices[i] = self.invoices[invoiceIds[i]];
+        }
+        
+        return companyInvoices;
+    }
+
+    function getCustomerInvoices(InvoiceStorage storage self, address customer) internal view returns (Invoice[] memory) {
+        uint256[] memory invoiceIds = self.customerInvoices[customer];
+        Invoice[] memory customerInvoices = new Invoice[](invoiceIds.length);
+        
+        for (uint256 i = 0; i < invoiceIds.length; i++) {
+            customerInvoices[i] = self.invoices[invoiceIds[i]];
+        }
+        
+        return customerInvoices;
     }
 }
